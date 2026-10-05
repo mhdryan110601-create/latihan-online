@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soal Latihan Online - Ilmu Ekonomi & Administrasi Umum</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Roboto Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        unbk: {
+                            blue: '#0f4c81',
+                            accent: '#2563eb',
+                            yellow: '#eab308',
+                            green: '#16a34a',
+                            dark: '#1e293b',
+                            light: '#f8fafc'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Roboto Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .font-sz-sm { font-size: 0.875rem; line-height: 1.25rem; }
+        .font-sz-md { font-size: 1rem; line-height: 1.5rem; }
+        .font-sz-lg { font-size: 1.15rem; line-height: 1.75rem; }
+        .font-sz-xl { font-size: 1.3rem; line-height: 2rem; }
+        
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        [v-cloak] { display: none; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col justify-between selection:bg-blue-600 selection:text-white">
+
+    <!-- App Main Navigation / CBT Header -->
+    <header class="bg-unbk-blue text-white shadow-md border-b-4 border-yellow-500 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-3">
+            <div class="flex items-center gap-3">
+                <div class="bg-white/10 p-2 rounded-lg border border-white/20">
+                    <i class="fa-solid fa-graduation-cap text-2xl text-yellow-400"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg md:text-xl font-bold tracking-wide uppercase">SOAL LATIHAN ONLINE</h1>
+                    <p class="text-xs text-blue-200">Mata Pelajaran: Ilmu Ekonomi & Administrasi Umum (15 PG & 5 Objektif)</p>
+                </div>
+            </div>
+
+            <!-- Header Info Dynamic Badge -->
+            <div id="headerInfoArea" class="flex items-center gap-3 text-sm">
+                <span class="bg-blue-900/60 text-blue-100 px-3 py-1.5 rounded-full text-xs font-semibold border border-blue-700/50 flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-yellow-400"></i> Sistem Server Aktif
+                </span>
+                <button id="logoutNavBtn" onclick="logoutToPortal()" class="hidden bg-rose-600 hover:bg-rose-700 text-white text-xs px-3 py-1.5 rounded-lg font-semibold transition flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-right-from-bracket"></i> Keluar
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow flex flex-col p-4 md:p-6 max-w-7xl w-full mx-auto">
+
+        <!-- SCREEN 1: PORTAL LOGIN / ROLE SELECTION -->
+        <section id="portalScreen" class="flex-grow flex items-center justify-center py-6">
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-lg w-full overflow-hidden">
+                <!-- Header Card -->
+                <div class="bg-gradient-to-r from-unbk-blue to-blue-700 p-6 text-white text-center relative">
+                    <div class="inline-block p-3 bg-white/10 rounded-full mb-3 backdrop-blur-sm">
+                        <i class="fa-solid fa-user-shield text-3xl text-yellow-400"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold">Portal Soal Latihan Online</h2>
+                    <p class="text-blue-200 text-sm mt-1">Mata Pelajaran: Ilmu Ekonomi & Administrasi Umum</p>
+                </div>
+
+                <!-- Tab Selector -->
+                <div class="p-6">
+                    <div class="flex rounded-xl bg-slate-100 p-1 mb-6 border border-slate-200">
+                        <button id="tabSiswaBtn" onclick="switchRoleTab('siswa')" class="flex-1 py-2.5 rounded-lg text-sm font-bold transition-all bg-white text-unbk-blue shadow-sm">
+                            <i class="fa-solid fa-user-graduate mr-2"></i> Siswa
+                        </button>
+                        <button id="tabGuruBtn" onclick="switchRoleTab('guru')" class="flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all text-slate-600 hover:text-slate-900">
+                            <i class="fa-solid fa-chalkboard-user mr-2"></i> Guru / Admin
+                        </button>
+                    </div>
+
+                    <!-- Siswa Form -->
+                    <form id="siswaLoginForm" onsubmit="handleSiswaLogin(event)" class="space-y-4">
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-800 flex items-start gap-2">
+                            <i class="fa-solid fa-circle-info text-blue-600 mt-0.5"></i>
+                            <div>Isi nama lengkap dan kelas Anda dengan benar</div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Nama Lengkap Siswa</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                                    <i class="fa-solid fa-id-card"></i>
+                                </span>
+                                <input type="text" id="siswaNama" required placeholder="Contoh: Ahmad Rizky Pratama" class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm outline-none transition">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Kelas / Jurusan</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                                    <i class="fa-solid fa-school"></i>
+                                </span>
+                                <input type="text" id="siswaKelas" required placeholder="Contoh: X OTKP 1 / XI AKL 2" class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm outline-none transition">
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                            <button type="submit" class="w-full py-3 bg-unbk-blue hover:bg-blue-800 text-white font-bold rounded-xl shadow-lg hover:shadow-blue-500/25 transition flex items-center justify-center gap-2">
+                                <span>Mulai Ujian</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Guru Form -->
+                    <form id="guruLoginForm" onsubmit="handleGuruLogin(event)" class="space-y-4 hidden">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Kode Akses Guru</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                                    <i class="fa-solid fa-key"></i>
+                                </span>
+                                <input type="password" id="guruKodeAkses" required placeholder="Masukkan Kode Akses..." class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm outline-none font-mono">
+                            </div>
+                        </div>
+
+                        <div id="guruAuthError" class="text-xs text-red-600 font-semibold hidden flex items-center gap-1">
+                            <i class="fa-solid fa-circle-exclamation"></i> Kode Akses Salah! Periksa kembali kode Anda.
+                        </div>
+
+                        <div class="pt-2">
+                            <button type="submit" class="w-full py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl shadow-lg hover:shadow-amber-600/25 transition flex items-center justify-center gap-2">
+                                <span>Masuk Dashboard Guru</span>
+                                <i class="fa-solid fa-gauge-high"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN 2: STUDENT CBT EXAM INTERFACE -->
+        <section id="examScreen" class="hidden flex-col gap-4">
+            <!-- Top CBT Bar -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center gap-4 border-r border-slate-200 pr-4">
+                    <div class="bg-blue-50 text-unbk-blue p-2.5 rounded-xl border border-blue-100">
+                        <i class="fa-solid fa-user-graduate text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Peserta Ujian</div>
+                        <div id="examStudentName" class="font-bold text-slate-800 text-base">Nama Siswa</div>
+                        <div id="examStudentClass" class="text-xs text-blue-600 font-semibold">Kelas: -</div>
+                    </div>
+                </div>
+
+                <!-- Size Adjuster & Timer -->
+                <div class="flex items-center gap-4 sm:gap-6 flex-wrap">
+                    <!-- Font Size Control -->
+                    <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200 text-xs">
+                        <span class="px-2 text-slate-500 font-semibold">Ukuran Teks:</span>
+                        <button onclick="changeFontSize('font-sz-sm')" class="px-2 py-1 hover:bg-white rounded font-bold">A-</button>
+                        <button onclick="changeFontSize('font-sz-md')" class="px-2 py-1 hover:bg-white rounded font-bold bg-white shadow-sm">A</button>
+                        <button onclick="changeFontSize('font-sz-lg')" class="px-2 py-1 hover:bg-white rounded font-bold">A+</button>
+                    </div>
+
+                    <!-- Timer Countdown -->
+                    <div class="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-xl">
+                        <i class="fa-solid fa-stopwatch text-lg animate-pulse"></i>
+                        <div>
+                            <div class="text-[10px] font-bold uppercase tracking-wider text-red-500">Sisa Waktu</div>
+                            <div id="examTimer" class="font-mono font-bold text-lg leading-none">25:00</div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Exam Button -->
+                    <button onclick="openSubmitConfirmModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm px-4 py-2.5 rounded-xl transition shadow-md flex items-center gap-2">
+                        <i class="fa-solid fa-check-double"></i>
+                        <span>Selesaikan Ujian</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Exam Layout: Question Area + Navigation Panel -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                <!-- Left Main Panel: Current Question (3 cols) -->
+                <div class="lg:col-span-3 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col min-h-[420px]">
+                    <!-- Question Header Bar -->
+                    <div class="bg-slate-50 border-b border-slate-200 p-4 flex justify-between items-center rounded-t-xl flex-wrap gap-2">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="bg-unbk-blue text-white font-bold text-sm px-3 py-1 rounded-md" id="currentQuestionNumBadge">Soal No. 1</span>
+                            <span id="questionCategoryBadge" class="bg-slate-200 text-slate-700 text-xs px-2.5 py-1 rounded-full font-medium">Ilmu Ekonomi</span>
+                            <span id="questionTypeBadge" class="bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-full font-bold">Pilihan Ganda</span>
+                        </div>
+                        <div id="questionInstruction" class="text-xs text-slate-500">Pilihan Ganda (Pilih 1 jawaban)</div>
+                    </div>
+
+                    <!-- Question Body -->
+                    <div id="questionBody" class="p-6 flex-grow font-sz-md leading-relaxed text-slate-800">
+                        <p id="questionText" class="mb-6 font-medium whitespace-pre-line">Memuat soal...</p>
+                        
+                        <!-- Options or Objective Input Container -->
+                        <div id="optionsContainer" class="space-y-3">
+                            <!-- Dynamically loaded options A-E or Input field -->
+                        </div>
+                    </div>
+
+                    <!-- Question Navigation Footer -->
+                    <div class="bg-slate-50 border-t border-slate-200 p-4 rounded-b-xl flex flex-wrap items-center justify-between gap-3">
+                        <button id="btnPrev" onclick="navigateQuestion(-1)" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-semibold text-sm transition flex items-center gap-2">
+                            <i class="fa-solid fa-chevron-left"></i>
+                            <span>Sebelumnya</span>
+                        </button>
+
+                        <button id="btnRagu" onclick="toggleRaguRagu()" class="px-4 py-2 bg-yellow-100 hover:bg-yellow-200 border border-yellow-300 text-yellow-800 rounded-lg font-semibold text-sm transition flex items-center gap-2">
+                            <input type="checkbox" id="chkRagu" class="rounded text-yellow-600 focus:ring-yellow-500 pointer-events-none">
+                            <span>Ragu-Ragu</span>
+                        </button>
+
+                        <button id="btnNext" onclick="navigateQuestion(1)" class="px-5 py-2 bg-unbk-blue hover:bg-blue-800 text-white rounded-lg font-semibold text-sm transition flex items-center gap-2">
+                            <span>Berikutnya</span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar Panel: Navigation Grid (1 col) -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-bold text-sm text-slate-800 mb-3 flex items-center justify-between border-b border-slate-100 pb-2">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-grip text-unbk-blue"></i> Navigasi Soal</span>
+                            <span class="text-xs text-slate-500">(20 Soal)</span>
+                        </h3>
+
+                        <!-- Status Legend -->
+                        <div class="grid grid-cols-3 gap-1 mb-4 text-[11px] font-medium text-slate-600 border-b border-slate-100 pb-3">
+                            <div class="flex items-center gap-1.5">
+                                <span class="w-3 h-3 rounded bg-blue-600 inline-block"></span> Terjawab
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <span class="w-3 h-3 rounded bg-yellow-400 inline-block"></span> Ragu
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <span class="w-3 h-3 rounded bg-slate-200 inline-block"></span> Belum
+                            </div>
+                        </div>
+
+                        <!-- Question Grid Buttons -->
+                        <div id="navigationGrid" class="grid grid-cols-5 gap-2 custom-scrollbar overflow-y-auto max-h-80 pr-1">
+                            <!-- Buttons 1 to 20 -->
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500 space-y-1">
+                        <div class="flex justify-between">
+                            <span>Terjawab:</span>
+                            <span id="statAnsweredCount" class="font-bold text-blue-600">0 / 20</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Ragu-ragu:</span>
+                            <span id="statRaguCount" class="font-bold text-yellow-600">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN 3: STUDENT RESULT / SCORE SCREEN -->
+        <section id="resultScreen" class="hidden flex-col gap-6 max-w-4xl mx-auto w-full py-4">
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+                <!-- Top Result Header -->
+                <div class="bg-gradient-to-r from-unbk-blue to-indigo-800 p-8 text-white text-center">
+                    <div class="inline-block p-4 bg-white/10 rounded-full mb-3 backdrop-blur-md">
+                        <i class="fa-solid fa-award text-4xl text-yellow-400"></i>
+                    </div>
+                    <h2 class="text-3xl font-extrabold">Hasil Soal Latihan Online</h2>
+                    <p class="text-blue-200 text-sm mt-1">Mata Pelajaran: Ilmu Ekonomi & Administrasi Umum</p>
+                </div>
+
+                <div class="p-6 md:p-8 space-y-6">
+                    <!-- Student Identity Summary -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200 text-sm">
+                        <div>
+                            <span class="text-xs text-slate-500 uppercase font-semibold block">Nama Peserta</span>
+                            <span id="resStudentName" class="font-bold text-slate-800 text-base">-</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-500 uppercase font-semibold block">Kelas / Jurusan</span>
+                            <span id="resStudentClass" class="font-bold text-slate-800 text-base">-</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-500 uppercase font-semibold block">Waktu Selesai</span>
+                            <span id="resFinishTime" class="font-bold text-slate-800 text-base">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Score Cards Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
+                            <span class="text-xs text-blue-700 font-bold uppercase tracking-wider">Nilai Akhir</span>
+                            <div id="resTotalScore" class="text-4xl font-extrabold text-blue-800 my-1 font-mono">0</div>
+                            <span class="text-[11px] text-blue-600">Skala 0 - 100</span>
+                        </div>
+
+                        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center">
+                            <span class="text-xs text-emerald-700 font-bold uppercase tracking-wider">Benar</span>
+                            <div id="resCorrectCount" class="text-3xl font-bold text-emerald-800 my-1 font-mono">0</div>
+                            <span class="text-[11px] text-emerald-600">Soal</span>
+                        </div>
+
+                        <div class="bg-rose-50 border border-rose-200 rounded-xl p-4 text-center">
+                            <span class="text-xs text-rose-700 font-bold uppercase tracking-wider">Salah</span>
+                            <div id="resIncorrectCount" class="text-3xl font-bold text-rose-800 my-1 font-mono">0</div>
+                            <span class="text-[11px] text-rose-600">Soal</span>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Answer Review Section -->
+                    <div class="border-t border-slate-200 pt-6">
+                        <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center justify-between">
+                            <span><i class="fa-solid fa-list-check text-unbk-blue mr-2"></i> Pembahasan Soal Latihan</span>
+                            <span class="text-xs font-normal text-slate-500">Evaluasi Jawaban Kamu</span>
+                        </h3>
+
+                        <div id="answerReviewList" class="space-y-4 max-h-96 overflow-y-auto custom-scrollbar pr-2">
+                            <!-- Generated Question Reviews -->
+                        </div>
+                    </div>
+
+                    <!-- Back to Portal Action -->
+                    <div class="pt-4 border-t border-slate-200 flex justify-end">
+                        <button onclick="logoutToPortal()" class="px-6 py-3 bg-unbk-blue hover:bg-blue-800 text-white font-bold rounded-xl shadow-md transition flex items-center gap-2">
+                            <i class="fa-solid fa-house"></i>
+                            <span>Kembali ke Halaman Utama</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN 4: TEACHER / ADMIN DASHBOARD -->
+        <section id="guruDashboard" class="hidden flex-col gap-6">
+            <!-- Admin Top Banner -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-wrap justify-between items-center gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="bg-amber-100 text-amber-800 p-3 rounded-2xl border border-amber-200">
+                        <i class="fa-solid fa-chalkboard-user text-2xl"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h2 class="text-xl font-bold text-slate-800">Dashboard Guru & Pengawas Ujian</h2>
+                            <span class="bg-amber-100 text-amber-800 text-xs font-mono font-bold px-2.5 py-0.5 rounded border border-amber-300">
+                                OTORISASI GURU
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-500">Kelola soal ujian, rekapitulasi nilai siswa, dan pemantauan real-time</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 flex-wrap">
+                    <button onclick="openGSheetConfigModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow transition flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-file-excel"></i>
+                        <span>Integrasi Google Sheets</span>
+                        <span id="gsheetStatusBadge" class="w-2 h-2 rounded-full bg-rose-400"></span>
+                    </button>
+                    <button onclick="exportScoresToCSV()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs shadow transition flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-file-csv"></i>
+                        <span>Ekspor CSV</span>
+                    </button>
+                    <button onclick="logoutToPortal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl font-bold text-xs transition flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Keluar</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab Navigation for Guru -->
+            <div class="flex border-b border-slate-200 gap-2">
+                <button id="guruTabNilai" onclick="switchGuruView('nilai')" class="px-5 py-3 font-bold text-sm border-b-2 border-unbk-blue text-unbk-blue flex items-center gap-2 cursor-pointer">
+                    <i class="fa-solid fa-square-poll-vertical"></i> Rekapitulasi Nilai Siswa
+                </button>
+                <button id="guruTabSoal" onclick="switchGuruView('soal')" class="px-5 py-3 font-semibold text-sm text-slate-500 hover:text-slate-800 border-b-2 border-transparent flex items-center gap-2 cursor-pointer">
+                    <i class="fa-solid fa-file-pen"></i> Bank Soal & Edit (20 Soal)
+                </button>
+            </div>
+
+            <!-- VIEW A: REKAP NILAI SISWA -->
+            <div id="guruNilaiView" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-4">
+                <div class="flex flex-wrap justify-between items-center gap-4">
+                    <h3 class="font-bold text-slate-800 text-base">Daftar Nilai Siswa Real-Time</h3>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <button onclick="syncAllToGoogleSheet()" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-lg border border-emerald-200 flex items-center gap-1.5 cursor-pointer">
+                            <i class="fa-solid fa-arrows-rotate"></i> Sync Ke Google Sheet
+                        </button>
+                        <div class="relative w-full sm:w-64">
+                            <input type="text" id="searchStudentInput" onkeyup="filterStudentTable()" placeholder="Cari Nama / Kelas..." class="w-full pl-9 pr-3 py-1.5 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                        </div>
+                        <button onclick="clearStudentResults()" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold rounded-lg border border-rose-200 cursor-pointer">
+                            Reset Rekap
+                        </button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto rounded-lg border border-slate-200">
+                    <table class="w-full text-left text-xs text-slate-700">
+                        <thead class="bg-slate-50 text-slate-600 font-bold uppercase tracking-wider border-b border-slate-200">
+                            <tr>
+                                <th class="p-3">#</th>
+                                <th class="p-3">Nama Siswa</th>
+                                <th class="p-3">Kelas</th>
+                                <th class="p-3">Waktu Selesai</th>
+                                <th class="p-3 text-center">Benar / Salah</th>
+                                <th class="p-3 text-center">Nilai</th>
+                                <th class="p-3 text-center">Status</th>
+                                <th class="p-3 text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentScoresTableBody" class="divide-y divide-slate-200 font-medium">
+                            <!-- Populated dynamically from storage -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- VIEW B: BANK SOAL EDITING -->
+            <div id="guruSoalView" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-6 hidden">
+                <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-base">Kelola Bank Soal Ujian</h3>
+                        <p class="text-xs text-slate-500">Total 20 Soal (15 Pilihan Ganda & 5 Objektif / Isian Singkat)</p>
+                    </div>
+                    <button onclick="openQuestionModal(null)" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-lg shadow transition flex items-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid fa-plus"></i> Tambah Soal Baru
+                    </button>
+                </div>
+
+                <!-- Questions List for Guru -->
+                <div id="guruQuestionsList" class="space-y-4">
+                    <!-- Dynamic Questions Cards -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL 1: SUBMIT CONFIRMATION MODAL -->
+    <div id="submitModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+            <div class="text-center mb-4">
+                <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-3 text-xl">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <h3 class="font-bold text-slate-900 text-lg">Konfirmasi Selesai Ujian</h3>
+                <p class="text-xs text-slate-500 mt-1">Apakah Anda yakin ingin menyelesaikan dan mengumpulkan lembar jawaban ujian ini?</p>
+            </div>
+
+            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs space-y-2 mb-5 font-medium">
+                <div class="flex justify-between">
+                    <span class="text-slate-600">Total Soal:</span>
+                    <span class="font-bold text-slate-900">20 Soal</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-600">Sudah Terjawab:</span>
+                    <span id="modalAnsweredCount" class="font-bold text-emerald-600">0 Soal</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-amber-700 font-bold">Masih Ragu-Ragu:</span>
+                    <span id="modalRaguCount" class="font-bold text-amber-700">0 Soal</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-rose-600 font-bold">Belum Dijawab:</span>
+                    <span id="modalUnansweredCount" class="font-bold text-rose-600">0 Soal</span>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <button onclick="closeSubmitConfirmModal()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition cursor-pointer">
+                    Periksa Kembali
+                </button>
+                <button onclick="confirmSubmitExam()" class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition shadow-md cursor-pointer">
+                    Ya, Kirim Jawaban
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: EDIT/ADD QUESTION MODAL -->
+    <div id="questionModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-100">
+                <h3 id="modalQuestionTitle" class="font-bold text-slate-900 text-base">Edit Soal Ujian</h3>
+                <button onclick="closeQuestionModal()" class="text-slate-400 hover:text-slate-600 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <form id="questionEditForm" onsubmit="saveQuestionForm(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="editQuestionId">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Kategori Soal</label>
+                        <select id="editKategori" class="w-full p-2.5 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                            <option value="Ilmu Ekonomi">Ilmu Ekonomi</option>
+                            <option value="Administrasi Umum">Administrasi Umum</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Tipe Soal</label>
+                        <select id="editTipe" onchange="toggleEditTipeFields()" class="w-full p-2.5 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                            <option value="pg">Pilihan Ganda (PG)</option>
+                            <option value="isian">Isian Objektif</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Teks Pertanyaan / Soal</label>
+                    <textarea id="editSoalText" rows="3" required placeholder="Tuliskan butir soal di sini..." class="w-full p-2.5 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+
+                <!-- Box Options for PG -->
+                <div id="editPgOptionsBox" class="space-y-2 border border-slate-200 p-3 rounded-xl bg-slate-50">
+                    <label class="block font-bold text-slate-800 mb-1">Pilihan Jawaban (A - E):</label>
+                    <div class="space-y-1.5">
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 font-bold text-slate-600">A.</span>
+                            <input type="text" id="editOptA" placeholder="Pilihan A" class="flex-1 p-2 border border-slate-300 rounded-lg outline-none bg-white">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 font-bold text-slate-600">B.</span>
+                            <input type="text" id="editOptB" placeholder="Pilihan B" class="flex-1 p-2 border border-slate-300 rounded-lg outline-none bg-white">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 font-bold text-slate-600">C.</span>
+                            <input type="text" id="editOptC" placeholder="Pilihan C" class="flex-1 p-2 border border-slate-300 rounded-lg outline-none bg-white">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 font-bold text-slate-600">D.</span>
+                            <input type="text" id="editOptD" placeholder="Pilihan D" class="flex-1 p-2 border border-slate-300 rounded-lg outline-none bg-white">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 font-bold text-slate-600">E.</span>
+                            <input type="text" id="editOptE" placeholder="Pilihan E" class="flex-1 p-2 border border-slate-300 rounded-lg outline-none bg-white">
+                        </div>
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-200 mt-2">
+                        <label class="block font-bold text-slate-700 mb-1">Kunci Jawaban Benar (PG):</label>
+                        <select id="editKunciPg" class="w-full p-2 border border-slate-300 rounded-lg outline-none bg-white font-bold text-emerald-700">
+                            <option value="a">A</option>
+                            <option value="b">B</option>
+                            <option value="c">C</option>
+                            <option value="d">D</option>
+                            <option value="e">E</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Box Options for Isian Objektif -->
+                <div id="editIsianOptionsBox" class="space-y-2 border border-slate-200 p-3 rounded-xl bg-slate-50 hidden">
+                    <label class="block font-bold text-slate-800">Kunci Jawaban Isian (Pisahkan dengan koma jika ada variasi jawaban):</label>
+                    <input type="text" id="editKunciIsian" placeholder="Contoh: mikro, ekonomi mikro, mikroekonomi" class="w-full p-2.5 border border-slate-300 rounded-lg outline-none bg-white font-mono uppercase">
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Pembahasan Soal</label>
+                    <textarea id="editPembahasan" rows="2" placeholder="Tuliskan penjelasan/pembahasan soal..." class="w-full p-2.5 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+
+                <div class="pt-2 flex justify-end gap-2 border-t border-slate-100">
+                    <button type="button" onclick="closeQuestionModal()" class="px-4 py-2 bg-slate-200 text-slate-700 font-bold rounded-lg cursor-pointer">Batal</button>
+                    <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow cursor-pointer">Simpan Soal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 3: GOOGLE SHEETS CONFIGURATION & SETUP GUIDE MODAL -->
+    <div id="gsheetModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-100">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-file-excel text-emerald-600 text-xl"></i>
+                    <h3 class="font-bold text-slate-900 text-base">Pengaturan Integrasi Google Sheets</h3>
+                </div>
+                <button onclick="closeGSheetConfigModal()" class="text-slate-400 hover:text-slate-600 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <div class="space-y-4 text-xs">
+                <!-- Input Web App URL -->
+                <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl space-y-2">
+                    <label class="block font-bold text-emerald-900">Google Web App URL Endpoint</label>
+                    <div class="flex gap-2">
+                        <input type="url" id="gsheetUrlInput" placeholder="https://script.google.com/macros/s/.../exec" class="flex-1 p-2.5 border border-slate-300 rounded-lg text-xs font-mono focus:ring-2 focus:ring-emerald-500 outline-none">
+                        <button onclick="saveGSheetUrl()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg shadow cursor-pointer">
+                            Simpan URL
+                        </button>
+                    </div>
+                    <p class="text-[11px] text-emerald-700">Setiap nilai siswa yang selesai dikerjakan akan dikirimkan otomatis ke spreadsheet ini.</p>
+                </div>
+
+                <!-- Setup Tutorial Instructions -->
+                <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 space-y-3">
+                    <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-list-ol text-blue-600"></i> Cara Menghubungkan Google Sheet (3 Langkah):
+                    </h4>
+                    <ol class="list-decimal list-inside space-y-2 text-slate-700 leading-relaxed">
+                        <li>Buat Spreadsheet baru di <strong>Google Sheets</strong> (beri judul misalnya: <em>Nilai Ujian CBT</em>).</li>
+                        <li>Klik menu <strong>Extensions (Ekstensi)</strong> &rarr; <strong>Apps Script</strong>.</li>
+                        <li>Hapus semua kode lama, salin (copy) kode script berikut, lalu tempelkan (paste):</li>
+                    </ol>
+
+                    <!-- Code Snippet Box -->
+                    <div class="relative bg-slate-900 text-slate-100 p-3 rounded-lg font-mono text-[11px] overflow-x-auto">
+                        <button onclick="copyAppsScriptCode()" class="absolute top-2 right-2 px-2.5 py-1 bg-blue-600 hover:bg-blue-500 text-white font-sans text-[10px] font-bold rounded transition cursor-pointer">
+                            <i class="fa-solid fa-copy mr-1"></i>Salin Kode
+                        </button>
+                        <pre id="gsheetScriptCode">function doPost(e) {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var data = JSON.parse(e.postData.contents);
+    
+    // Jika baris pertama kosong, tambahkan header
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(["Tanggal & Waktu", "Nama Siswa", "Kelas", "Nilai Akhir", "Benar", "Salah"]);
+    }
+    
+    sheet.appendRow([
+      data.finishTime || new Date().toLocaleString(),
+      data.nama,
+      data.kelas,
+      data.score,
+      data.correctCount,
+      data.incorrectCount
+    ]);
+    
+    return ContentService.createTextOutput(JSON.stringify({result: "success"}))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    return ContentService.createTextOutput(JSON.stringify({result: "error", error: err.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}</pre>
+                    </div>
+
+                    <ol start="4" class="list-decimal list-inside space-y-2 text-slate-700 leading-relaxed">
+                        <li>Klik <strong>Deploy (Terapkan)</strong> &rarr; <strong>New deployment (Terapkan baru)</strong>.</li>
+                        <li>Pilih Jenis: <strong>Web app (Aplikasi web)</strong>.</li>
+                        <li>Atur <em>Who has access (Siapa yang memiliki akses)</em> menjadi: <strong class="text-rose-600">Anyone (Siapa saja)</strong>.</li>
+                        <li>Klik <strong>Deploy</strong>, izinkan akses akun Google, lalu salin <strong>Web app URL</strong> dan tempelkan pada variabel <code>DEFAULT_GSHEET_URL</code> di dalam berkas HTML ini!</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-100 flex justify-end">
+                <button onclick="closeGSheetConfigModal()" class="px-5 py-2 bg-slate-200 text-slate-700 font-bold rounded-xl text-xs cursor-pointer">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM TOAST ALERT BOX -->
+    <div id="toastAlert" class="fixed bottom-5 right-5 bg-slate-900 text-white text-xs px-4 py-3 rounded-xl shadow-2xl z-50 flex items-center gap-3 transition-all transform translate-y-20 opacity-0 pointer-events-none">
+        <i id="toastIcon" class="fa-solid fa-circle-info text-blue-400 text-base"></i>
+        <span id="toastMessage">Pesan notifikasi</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-3 text-center text-xs text-slate-500">
+        <p>Sistem Ujian Online Interaktif &copy; 2026 - M. RYAN CBT Digital Assessment</p>
+    </footer>
+
+    <script>
+        // =========================================================================
+        // IMPORTANT: PASTE YOUR GOOGLE WEB APP URL HERE SO ALL DEVICES CAN ACCESS IT!
+        // Contoh: const DEFAULT_GSHEET_URL = "https://script.google.com/macros/s/AKfycbx.../exec";
+        // =========================================================================
+        const DEFAULT_GSHEET_URL = ""; 
+
+        // MASTER BANK SOAL DATASET (20 Soal: 15 PG & 5 Isian Objektif)
+        const defaultQuestions = [
+            // --- 15 SOAL PILIHAN GANDA ---
+            {
+                id: 1,
+                tipe: 'pg',
+                kategori: 'Ilmu Ekonomi',
+                soal: 'Masalah pokok ekonomi yang dihadapi oleh setiap masyarakat modern mencakup tiga pertanyaan mendasar, yaitu...',
+                pilihan: {
+                    a: 'Apa yang diproduksi, bagaimana memproduksi, dan untuk siapa diproduksi',
+                    b: 'Berapa modal awal, siapa pemiliknya, dan di mana lokasinya',
+                    c: 'Mengapa diproduksi, kapan diproduksi, dan berapa harganya',
+                    d: 'Berapa banyak keuntungan, siapa pembelinya, dan bagaimana distribusinya',
+                    e: 'Siapa produsennya, apa bahan bakunya, dan bagaimana pemasarannya'
+                },
+                kunci: 'a',
+                pembahasan: 'Tiga masalah utama ekonomi klasik/modern menurut Paul A. Samuelson adalah What (apa & berapa), How (bagaimana cara memproduksi), dan For Whom (untuk siapa barang diproduksi).'
+            },
+            {
+                id: 2,
+                tipe: 'pg',
+                kategori: 'Administrasi Umum',
+                soal: 'Unsur manajemen yang berkaitan dengan penyusunan tata kerja dan struktur organisasi agar tugas dapat berjalan dengan efektif dinamakan fungsi...',
+                pilihan: {
+                    a: 'Planning (Perencanaan)',
+                    b: 'Organizing (Pengorganisasian)',
+                    c: 'Actuating (Penggerakan)',
+                    d: 'Controlling (Pengawasan)',
+                    e: 'Evaluating (Evaluasi)'
+                },
+                kunci: 'b',
+                pembahasan: 'Organizing (Pengorganisasian) adalah proses pembagian kerja, pengelompokan tugas, dan pembentukan struktur hubungan dalam organisasi.'
+            },
+            {
+                id: 3,
+                tipe: 'pg',
+                kategori: 'Ilmu Ekonomi',
+                soal: 'Menurut Hukum Permintaan, apabila harga suatu barang atau jasa mengalami kenaikan, maka kuantitas barang yang diminta akan...',
+                pilihan: {
+                    a: 'Mengalami kenaikan secara proporsional',
+                    b: 'Tetap tidak berubah sama sekali',
+                    c: 'Mengalami penurunan (ceteris paribus)',
+                    d: 'Berfluktuasi tanpa pola jelas',
+                    e: 'Mencapai titik ekuilibrium baru'
+                },
+                kunci: 'c',
+                pembahasan: 'Hukum permintaan berbunyi: "Jika harga suatu barang naik, maka jumlah barang yang diminta akan turun, dan sebaliknya (ceteris paribus)".'
+            },
+            {
+                id: 4,
+                tipe: 'pg',
+                kategori: 'Administrasi Umum',
+                soal: 'Di dalam sistem kearsipan kantor, asas penyimpanan berkas yang menggabungkan keunggulan asas sentralisasi dan desentralisasi disebut asas...',
+                pilihan: {
+                    a: 'Asas Kebijakan',
+                    b: 'Asas Dekonsentrasi / Campuran',
+                    c: 'Asas Otonomi Daerah',
+                    d: 'Asas Efisiensi Mutlak',
+                    e: 'Asas Kolektif'
+                },
+                kunci: 'b',
+                pembahasan: 'Asas Campuran (Dekonsentrasi) menggabungkan asas sentralisasi (kontrol & standar baku) dan desentralisasi (pengelolaan operasional tiap unit kerja).'
+            },
+            {
+                id: 5,
+                tipe: 'pg',
+                kategori: 'Ilmu Ekonomi',
+                soal: 'Suatu sistem ekonomi di mana pemerintah dan sektor swasta saling berkolaborasi dalam menyelesaikan masalah ekonomi disebut sistem ekonomi...',
+                pilihan: {
+                    a: 'Tradisional',
+                    b: 'Komando / Terpusat',
+                    c: 'Pasar Bebas / Liberal',
+                    d: 'Campuran',
+                    e: 'Etatisme'
+                },
+                kunci: 'd',
+                pembahasan: 'Sistem ekonomi campuran memadukan kebebasan mekanisme pasar (swasta) dengan peranan dan regulasi dari pihak pemerintah.'
+            },
+            {
+                id: 6,
+                tipe: 'pg',
+                kategori: 'Administrasi Umum',
+                soal: 'Tata ruang kantor yang terdiri dari ruangan-ruangan kecil terpisah untuk setiap pegawai atau bagian dinamakan tata ruang kantor...',
+                pilihan: {
+                    a: 'Terbuka (Open Plan Office)',
+                    b: 'Bersekat / Tertutup (Cubicle/Private Office)',
+                    c: 'Berhias / Panorama (Landscape Office)',
+                    d: 'Gabungan Fleksibel',
+                    e: 'Minimalis Modern'
+                },
+                kunci: 'b',
+                pembahasan: 'Tata ruang kantor tertutup/bersekat membagi area kerja menjadi kamar-kamar atau kubikel terpisah untuk menjaga privasi dan konsentrasi.'
+            },
+            {
+                id: 7,
+                tipe: 'pg',
+                kategori: 'Ilmu Ekonomi',
+                soal: 'Kebijakan Bank Sentral untuk mengendalikan jumlah uang yang beredar di masyarakat dengan cara menaikkan atau menurunkan suku bunga dinamakan kebijakan...',
+                pilihan: {
+                    a: 'Fiskal Pasar',
+                    b: 'Diskonto (Discount Rate Policy)',
+                    c: 'Operasi Pasar Terbuka',
+                    d: 'Giro Wajib Minimum (GWM)',
+                    e: 'Kredit Ketat'
+                },
+                kunci: 'b',
+                pembahasan: 'Kebijakan Diskonto adalah kebijakan moneter bank sentral dengan mengatur tingkat suku bunga pinjaman kepada bank umum.'
+            },
+            {
+                id: 8,
+                tipe: 'pg',
+                kategori: 'Administrasi Umum',
+                soal: 'Sistem penyimpanan dan penemuan kembali arsip berdasarkan nama individu, perusahaan, atau organisasi dinamakan...',
+                pilihan: {
+                    a: 'Sistem Subjek / Pokok Masalah',
+                    b: 'Sistem Abjad (Alphabetical Filing)',
+                    c: 'Sistem Nomor (Numerical Filing)',
+                    d: 'Sistem Wilayah (Geographical Filing)',
+                    e: 'Sistem Kronologis'
+                },
+                kunci: 'b',
+                pembahasan: 'Sistem Abjad mengurutkan berkas arsip berdasarkan urutan huruf A sampai Z dari nama orang/lembaga.'
+            },
+            {
+                id: 9,
+                tipe: 'pg',
+                kategori: 'Ilmu Ekonomi',
+                soal: 'Kondisi di mana jumlah barang yang ditawarkan oleh produsen sama persis dengan jumlah barang yang diminta oleh konsumen pada tingkat harga tertentu disebut...',
+                pilihan: {
+                    a: 'Surplus Konsumen',
+                    b: 'Defisit Anggaran',
+                    c: 'Harga Ekuilibrium (Keseimbangan Pasar)',
+                    d: 'Inflasi Terkendali',
+                    e: 'Marginal Utility'
+                },
+                kunci: 'c',
+                pembahasan: 'Keseimbangan Pasar (Equilibrium) terjadi saat kurva permintaan dan penawaran berpotongan (Qd = Qs).'
+            },
+            {
+                id: 10,
+                tipe: 'pg',
+                kategori: 'Administrasi Umum',
+                soal: 'Dokumen tertulis yang memuat panduan baku langkah-langkah operasional kerja di lingkungan organisasi dinamakan...',
+                pilihan: {
+                    a: 'SOP (Standard Operating Procedure)',
+                    b: 'Kertas Kerja Pemeriksaan',
+                    c: 'Surat Keputusan Direksi',
+                    d: 'Notulen Rapat Organisasi',
+                    e: 'Laporan Akuntabilitas'
+                },
+                kunci: 'a',
+                pembahasan: 'Standard Operating Procedure (SOP) adalah instruksi tertulis yang dibakukan mengenai berbagai proses penyelenggaraan aktivitas organisasi.'
+            },
+            {
+                id: 11,
+                tipe: 'pg',
+                kategori: 'Ilmu Ekonomi',
+                soal: 'Total nilai barang dan jasa akhir yang dihasilkan oleh warga negara suatu negara, baik yang tinggal di dalam negeri maupun di luar negeri dalam satu periode disebut...',
+                pilihan: {
+                    a: 'Gross Domestic Product (GDP)',
+                    b: 'Gross National Product (GNP)',
+                    c: 'Net National Product (NNP)',
+                    d: 'Disposable Income (DI)',
+                    e: 'Personal Income (PI)'
+                },
+                kunci: 'b',
+                pembahasan: 'GNP (Produk Nasional Bruto) memperhitungkan total pendapatan berdasarkan kewarganegaraan (kewarganegaraan asli di manapun berada).'
+            },
+            {
+                id: 12,
+                tipe: 'pg',
+                kategori: 'Administrasi Umum',
+                soal: 'Etika menerima telepon masuk kantor yang tepat ketika panggilan berdering adalah...',
+                pilihan: {
+                    a: 'Membiarkan telepon berdering lebih dari 5 kali',
+                    b: 'Segera mengangkat pada dering ke-2 atau ke-3, mengucapkan salam dan identitas instansi',
+                    c: 'Langsung bertanya keperluan penelepon tanpa mengucap salam',
+                    d: 'Mengangkat telepon sambil menyantap makanan',
+                    e: 'Meminta penelepon menunggu selama 15 menit tanpa penjelasan'
+                },
+                kunci: 'b',
+                pembahasan: 'Etika telepon kantor profesional mensyaratkan untuk mengangkat dering sebelum dering ke-3 dan memberi salam resmi serta identitas instansi.'
+            },
+            {
+                id: 13,
+                tipe: 'pg',
+                kategori: 'Administrasi Umum',
+                soal: 'Peralatan kantor berukuran relatif kecil yang umumnya habis dipakai dalam aktivitas operasional sehari-hari dinamakan...',
+                pilihan: {
+                    a: 'Mesin Kantor (Office Machine)',
+                    b: 'Perlengkapan / Perlengkapan Habis Pakai (Office Supplies)',
+                    c: 'Perabot Kantor (Office Furniture)',
+                    d: 'Interior Kantor',
+                    e: 'Aset Tetap Properti'
+                },
+                kunci: 'b',
+                pembahasan: 'Perlengkapan kantor habis pakai (supplies) seperti kertas, tinta, klip kertas, dan map bersifat konstan diganti dalam operasional.'
+            },
+            {
+                id: 14,
+                tipe: 'pg',
+                kategori: 'Ilmu Ekonomi',
+                soal: 'Bentuk pasar di mana terdapat hanya satu penjual tunggal yang menguasai seluruh penawaran pasar untuk barang tanpa substitusi dekat dinamakan pasar...',
+                pilihan: {
+                    a: 'Persaingan Sempurna',
+                    b: 'Monopoli',
+                    c: 'Oligopoli',
+                    d: 'Monopolistik',
+                    e: 'Monopsoni'
+                },
+                kunci: 'b',
+                pembahasan: 'Pasar monopoli dikuasai oleh satu produsen/penjual tunggal yang memiliki penentu harga (price maker).'
+            },
+            {
+                id: 15,
+                tipe: 'pg',
+                kategori: 'Administrasi Umum',
+                soal: 'Struktur organisasi yang mana wewenang mengalir langsung secara vertikal dari pimpinan tertinggi hingga bawahan dinamakan organisasi bentuk...',
+                pilihan: {
+                    a: 'Fungsional',
+                    b: 'Lini / Garis',
+                    c: 'Matriks',
+                    d: 'Kepanitiaan',
+                    e: 'Regional'
+                },
+                kunci: 'b',
+                pembahasan: 'Bentuk lini/garis merupakan struktur tertua di mana lalu lintas wewenang dan tanggung jawab mengalir lurus vertikal dari pimpinan ke staf.'
+            },
+
+            // --- 5 SOAL ISIAN OBJEKTIF ---
+            {
+                id: 16,
+                tipe: 'isian',
+                kategori: 'Ilmu Ekonomi',
+                soal: 'Sebutkan cabang ilmu ekonomi yang secara khusus mempelajari perilaku individu, rumah tangga, dan perusahaan dalam pengambilan keputusan!',
+                kunci: ['mikro', 'ekonomi mikro', 'mikroekonomi'],
+                pembahasan: 'Ekonomi Mikro menganalisis unit-unit kecil kegiatan ekonomi seperti interaksi di pasar barang, perilaku konsumen, dan produsen.'
+            },
+            {
+                id: 17,
+                tipe: 'isian',
+                kategori: 'Administrasi Umum',
+                soal: 'Sebutkan istilah untuk kegiatan menghimpun, mencatat, mengolah, menggandakan, mengirim, dan menyimpan bahan keterangan kantor!',
+                kunci: ['tata usaha', 'administrasi', 'ketatausahaan'],
+                pembahasan: 'Tata Usaha (Administrasi dalam arti sempit) mencakup aktivitas pencatatan, korespondensi, dan kearsipan dokumen.'
+            },
+            {
+                id: 18,
+                tipe: 'isian',
+                kategori: 'Ilmu Ekonomi',
+                soal: 'Sebutkan grafik/kurva yang menunjukkan hubungan antara harga barang dengan jumlah barang yang diminta konsumen!',
+                kunci: ['kurva permintaan', 'permintaan'],
+                pembahasan: 'Kurva Permintaan miring dari kiri atas ke kanan bawah menunjukkan hubungan berbanding terbalik antara harga dan kuantitas.'
+            },
+            {
+                id: 19,
+                tipe: 'isian',
+                kategori: 'Administrasi Umum',
+                soal: 'Sebutkan istilah sistem pengelolaan dokumen dari penciptaan, penggunaan, hingga pemusnahan berkas!',
+                kunci: ['kearsipan', 'manajemen kearsipan', 'pengelolaan arsip'],
+                pembahasan: 'Manajemen Kearsipan adalah penyelenggaraan kearsipan yang efektif dan efisien sepanjang daur hidup berkas.'
+            },
+            {
+                id: 20,
+                tipe: 'isian',
+                kategori: 'Ilmu Ekonomi',
+                soal: 'Sebutkan sebutan bagi pihak atau lembaga yang memberikan pinjaman dana/kredit kepada pihak pembeli!',
+                kunci: ['kreditur', 'kreditor'],
+                pembahasan: 'Kreditur adalah pihak (perorangan, bank, atau lembaga keuangan) yang menyalurkan pinjaman/kredit kepada debitur.'
+            }
+        ];
+
+        // State Variables
+        let questions = [];
+        let currentStudent = null;
+        let currentQuestionIndex = 0;
+        let userAnswers = {};
+        let raguFlags = {};
+        let timerSeconds = 25 * 60;
+        let timerInterval = null;
+        let studentResults = [];
+        let gsheetUrl = '';
+
+        // Initialize Application on Load
+        window.onload = function() {
+            const savedQuestions = localStorage.getItem('cbt_questions_data');
+            if (savedQuestions) {
+                try { questions = JSON.parse(savedQuestions); } catch(e) { questions = defaultQuestions; }
+            } else {
+                questions = defaultQuestions;
+            }
+
+            const savedResults = localStorage.getItem('cbt_student_results_history');
+            if (savedResults) {
+                try { studentResults = JSON.parse(savedResults); } catch(e) { studentResults = []; }
+            }
+
+            gsheetUrl = localStorage.getItem('cbt_gsheet_url') || DEFAULT_GSHEET_URL;
+            updateGSheetBadge();
+        };
+
+        function getActiveGSheetUrl() {
+            return localStorage.getItem('cbt_gsheet_url') || DEFAULT_GSHEET_URL;
+        }
+
+        function switchRoleTab(role) {
+            const siswaBtn = document.getElementById('tabSiswaBtn');
+            const guruBtn = document.getElementById('tabGuruBtn');
+            const siswaForm = document.getElementById('siswaLoginForm');
+            const guruForm = document.getElementById('guruLoginForm');
+
+            if (role === 'siswa') {
+                siswaBtn.className = 'flex-1 py-2.5 rounded-lg text-sm font-bold transition-all bg-white text-unbk-blue shadow-sm';
+                guruBtn.className = 'flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all text-slate-600 hover:text-slate-900';
+                siswaForm.classList.remove('hidden');
+                guruForm.classList.add('hidden');
+            } else {
+                guruBtn.className = 'flex-1 py-2.5 rounded-lg text-sm font-bold transition-all bg-white text-amber-700 shadow-sm';
+                siswaBtn.className = 'flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all text-slate-600 hover:text-slate-900';
+                guruForm.classList.remove('hidden');
+                siswaForm.classList.add('hidden');
+            }
+        }
+
+        function handleSiswaLogin(e) {
+            e.preventDefault();
+            const nama = document.getElementById('siswaNama').value.trim();
+            const kelas = document.getElementById('siswaKelas').value.trim();
+
+            if (!nama || !kelas) {
+                showToast('Isi nama lengkap dan kelas terlebih dahulu!', 'warning');
+                return;
+            }
+
+            currentStudent = { nama, kelas };
+            userAnswers = {};
+            raguFlags = {};
+            currentQuestionIndex = 0;
+
+            document.getElementById('examStudentName').textContent = nama;
+            document.getElementById('examStudentClass').textContent = 'Kelas: ' + kelas;
+
+            showScreen('examScreen');
+            document.getElementById('logoutNavBtn').classList.remove('hidden');
+            
+            startExamTimer();
+            renderQuestion();
+            renderNavigationGrid();
+            showToast('Selamat Mengerjakan Ujian, ' + nama + '!', 'info');
+        }
+
+        function handleGuruLogin(e) {
+            e.preventDefault();
+            const kode = document.getElementById('guruKodeAkses').value.trim();
+            const authErr = document.getElementById('guruAuthError');
+
+            if (kode === 'M.RYAN11' || kode === 'GURU123' || kode === 'ADMIN2026') {
+                authErr.classList.add('hidden');
+                document.getElementById('guruKodeAkses').value = '';
+                showScreen('guruDashboard');
+                document.getElementById('logoutNavBtn').classList.remove('hidden');
+                renderStudentScoresTable();
+                renderGuruQuestionsList();
+                showToast('Selamat datang di Dashboard Guru', 'info');
+            } else {
+                authErr.classList.remove('hidden');
+            }
+        }
+
+        function showScreen(screenId) {
+            ['portalScreen', 'examScreen', 'resultScreen', 'guruDashboard'].forEach(id => {
+                const el = document.getElementById(id);
+                if (id === screenId) {
+                    el.classList.remove('hidden');
+                    el.classList.add('flex');
+                } else {
+                    el.classList.add('hidden');
+                    el.classList.remove('flex');
+                }
+            });
+        }
+
+        function logoutToPortal() {
+            if (timerInterval) clearInterval(timerInterval);
+            currentStudent = null;
+            userAnswers = {};
+            raguFlags = {};
+            document.getElementById('logoutNavBtn').classList.add('hidden');
+            showScreen('portalScreen');
+            showToast('Anda telah keluar dari sesi.', 'info');
+        }
+
+        function startExamTimer() {
+            timerSeconds = 25 * 60;
+            const timerDisplay = document.getElementById('examTimer');
+            if (timerInterval) clearInterval(timerInterval);
+
+            timerInterval = setInterval(() => {
+                if (timerSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    showToast('Waktu Ujian telah Habis!', 'warning');
+                    confirmSubmitExam();
+                    return;
+                }
+                timerSeconds--;
+                const mins = Math.floor(timerSeconds / 60);
+                const secs = timerSeconds % 60;
+                timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function changeFontSize(sizeClass) {
+            const questionBody = document.getElementById('questionBody');
+            questionBody.className = `p-6 flex-grow ${sizeClass} leading-relaxed text-slate-800`;
+        }
+
+        function renderQuestion() {
+            if (questions.length === 0) return;
+            const q = questions[currentQuestionIndex];
+
+            document.getElementById('currentQuestionNumBadge').textContent = `Soal No. ${currentQuestionIndex + 1}`;
+            document.getElementById('questionCategoryBadge').textContent = q.kategori;
+            document.getElementById('questionTypeBadge').textContent = q.tipe === 'pg' ? 'Pilihan Ganda' : 'Isian Objektif';
+            document.getElementById('questionInstruction').textContent = q.tipe === 'pg' ? 'Pilihan Ganda (Pilih 1 jawaban)' : 'Ketikkan jawaban singkat & tepat';
+            document.getElementById('questionText').textContent = q.soal;
+
+            document.getElementById('chkRagu').checked = !!raguFlags[q.id];
+
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            if (q.tipe === 'pg') {
+                for (let key in q.pilihan) {
+                    const isSelected = userAnswers[q.id] === key;
+                    const optDiv = document.createElement('div');
+                    optDiv.onclick = () => selectOption(q.id, key);
+                    optDiv.className = `p-3.5 rounded-xl border-2 transition cursor-pointer flex items-start gap-3.5 ${
+                        isSelected 
+                            ? 'border-blue-600 bg-blue-50/80 shadow-sm ring-1 ring-blue-500 font-semibold' 
+                            : 'border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50'
+                    }`;
+
+                    optDiv.innerHTML = `
+                        <div class="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 uppercase ${
+                            isSelected ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-700'
+                        }">${key}</div>
+                        <div class="text-sm pt-0.5 text-slate-800 flex-grow leading-snug">${q.pilihan[key]}</div>
+                    `;
+                    optionsContainer.appendChild(optDiv);
+                }
+            } else {
+                const currentVal = userAnswers[q.id] || '';
+                const inputDiv = document.createElement('div');
+                inputDiv.className = 'space-y-2';
+                inputDiv.innerHTML = `
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500">Ketikkan Jawaban Anda:</label>
+                    <input type="text" value="${currentVal}" oninput="saveIsianAnswer(${q.id}, this.value)" placeholder="Tulis kata kunci jawaban..." class="w-full p-4 border-2 border-slate-300 focus:border-blue-600 rounded-xl font-medium text-slate-800 text-base shadow-inner uppercase bg-slate-50 focus:bg-white transition outline-none">
+                    <p class="text-xs text-slate-400"><i class="fa-solid fa-circle-info mr-1"></i>Jawaban tidak sensitif terhadap huruf besar/kecil.</p>
+                `;
+                optionsContainer.appendChild(inputDiv);
+            }
+
+            document.getElementById('btnPrev').disabled = currentQuestionIndex === 0;
+            document.getElementById('btnPrev').style.opacity = currentQuestionIndex === 0 ? '0.5' : '1';
+        }
+
+        function selectOption(qId, key) {
+            userAnswers[qId] = key;
+            renderQuestion();
+            renderNavigationGrid();
+        }
+
+        function saveIsianAnswer(qId, val) {
+            userAnswers[qId] = val.trim();
+            renderNavigationGrid();
+        }
+
+        function toggleRaguRagu() {
+            const q = questions[currentQuestionIndex];
+            raguFlags[q.id] = !raguFlags[q.id];
+            renderQuestion();
+            renderNavigationGrid();
+        }
+
+        function navigateQuestion(direction) {
+            const newIndex = currentQuestionIndex + direction;
+            if (newIndex >= 0 && newIndex < questions.length) {
+                currentQuestionIndex = newIndex;
+                renderQuestion();
+                renderNavigationGrid();
+            }
+        }
+
+        function renderNavigationGrid() {
+            const grid = document.getElementById('navigationGrid');
+            grid.innerHTML = '';
+
+            let answeredCount = 0;
+            let raguCount = 0;
+
+            questions.forEach((q, idx) => {
+                const hasAnswer = userAnswers[q.id] !== undefined && userAnswers[q.id] !== '';
+                const isRagu = !!raguFlags[q.id];
+                const isCurrent = idx === currentQuestionIndex;
+
+                if (hasAnswer) answeredCount++;
+                if (isRagu) raguCount++;
+
+                let bgClass = 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200';
+                if (isRagu) {
+                    bgClass = 'bg-yellow-400 text-yellow-950 font-bold border-yellow-500';
+                } else if (hasAnswer) {
+                    bgClass = 'bg-blue-600 text-white font-bold border-blue-700';
+                }
+
+                const ringClass = isCurrent ? 'ring-2 ring-offset-2 ring-blue-600 scale-105 z-10' : '';
+
+                const btn = document.createElement('button');
+                btn.onclick = () => {
+                    currentQuestionIndex = idx;
+                    renderQuestion();
+                    renderNavigationGrid();
+                };
+                btn.className = `h-10 rounded-lg text-xs font-semibold border flex items-center justify-center transition-all ${bgClass} ${ringClass} cursor-pointer`;
+                btn.textContent = idx + 1;
+                grid.appendChild(btn);
+            });
+
+            document.getElementById('statAnsweredCount').textContent = `${answeredCount} / ${questions.length}`;
+            document.getElementById('statRaguCount').textContent = raguCount;
+        }
+
+        function openSubmitConfirmModal() {
+            let answered = 0;
+            let ragu = 0;
+            questions.forEach(q => {
+                if (userAnswers[q.id] !== undefined && userAnswers[q.id] !== '') answered++;
+                if (raguFlags[q.id]) ragu++;
+            });
+
+            document.getElementById('modalAnsweredCount').textContent = `${answered} Soal`;
+            document.getElementById('modalRaguCount').textContent = `${ragu} Soal`;
+            document.getElementById('modalUnansweredCount').textContent = `${questions.length - answered} Soal`;
+
+            document.getElementById('submitModal').classList.remove('hidden');
+        }
+
+        function closeSubmitConfirmModal() {
+            document.getElementById('submitModal').classList.add('hidden');
+        }
+
+        function confirmSubmitExam() {
+            closeSubmitConfirmModal();
+            if (timerInterval) clearInterval(timerInterval);
+
+            let correctCount = 0;
+            let incorrectCount = 0;
+
+            questions.forEach(q => {
+                const ans = userAnswers[q.id];
+                if (!ans) {
+                    incorrectCount++;
+                    return;
+                }
+
+                if (q.tipe === 'pg') {
+                    if (ans.toLowerCase() === q.kunci.toLowerCase()) {
+                        correctCount++;
+                    } else {
+                        incorrectCount++;
+                    }
+                } else {
+                    const cleanAns = ans.toLowerCase().trim();
+                    const isCorrect = q.kunci.some(k => k.toLowerCase().trim() === cleanAns);
+                    if (isCorrect) {
+                        correctCount++;
+                    } else {
+                        incorrectCount++;
+                    }
+                }
+            });
+
+            const totalScore = Math.round((correctCount / questions.length) * 100);
+            const nowTime = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
+
+            const resultRecord = {
+                id: Date.now(),
+                nama: currentStudent.nama,
+                kelas: currentStudent.kelas,
+                score: totalScore,
+                correctCount,
+                incorrectCount,
+                finishTime: nowTime
+            };
+
+            studentResults.unshift(resultRecord);
+            localStorage.setItem('cbt_student_results_history', JSON.stringify(studentResults));
+
+            sendDataToGoogleSheet(resultRecord);
+
+            document.getElementById('resStudentName').textContent = currentStudent.nama;
+            document.getElementById('resStudentClass').textContent = currentStudent.kelas;
+            document.getElementById('resFinishTime').textContent = nowTime;
+            document.getElementById('resTotalScore').textContent = totalScore;
+            document.getElementById('resCorrectCount').textContent = correctCount;
+            document.getElementById('resIncorrectCount').textContent = incorrectCount;
+
+            renderAnswerReview();
+            showScreen('resultScreen');
+            showToast('Ujian Berhasil Dikumpulkan!', 'info');
+        }
+
+        function sendDataToGoogleSheet(record) {
+            const url = getActiveGSheetUrl();
+            if (!url) {
+                console.warn("URL Google Sheet belum diatur.");
+                return;
+            }
+
+            fetch(url, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(record)
+            }).then(() => {
+                console.log("Data terunggah ke Google Sheet");
+            }).catch(err => {
+                console.error("Gagal mengirim ke Google Sheet:", err);
+            });
+        }
+
+        function openGSheetConfigModal() {
+            document.getElementById('gsheetUrlInput').value = getActiveGSheetUrl();
+            document.getElementById('gsheetModal').classList.remove('hidden');
+        }
+
+        function closeGSheetConfigModal() {
+            document.getElementById('gsheetModal').classList.add('hidden');
+        }
+
+        function saveGSheetUrl() {
+            const url = document.getElementById('gsheetUrlInput').value.trim();
+            localStorage.setItem('cbt_gsheet_url', url);
+            gsheetUrl = url;
+            updateGSheetBadge();
+            showToast(url ? 'URL Google Sheet berhasil disimpan!' : 'URL Google Sheet telah dihapus.', 'info');
+            closeGSheetConfigModal();
+        }
+
+        function updateGSheetBadge() {
+            const badge = document.getElementById('gsheetStatusBadge');
+            if (badge) {
+                if (getActiveGSheetUrl()) {
+                    badge.className = 'w-2 h-2 rounded-full bg-emerald-300 animate-pulse';
+                } else {
+                    badge.className = 'w-2 h-2 rounded-full bg-rose-400';
+                }
+            }
+        }
+
+        function syncAllToGoogleSheet() {
+            const url = getActiveGSheetUrl();
+            if (!url) {
+                showToast('Atur URL Google Sheet terlebih dahulu!', 'warning');
+                openGSheetConfigModal();
+                return;
+            }
+
+            if (studentResults.length === 0) {
+                showToast('Belum ada data nilai untuk disinkronkan.', 'warning');
+                return;
+            }
+
+            studentResults.forEach(record => {
+                sendDataToGoogleSheet(record);
+            });
+
+            showToast(`Mengirim ${studentResults.length} data ke Google Sheets...`, 'info');
+        }
+
+        function copyAppsScriptCode() {
+            const codeText = document.getElementById('gsheetScriptCode').innerText;
+            const tempArea = document.createElement('textarea');
+            tempArea.value = codeText;
+            document.body.appendChild(tempArea);
+            tempArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempArea);
+            showToast('Kode Google Apps Script berhasil disalin!', 'info');
+        }
+
+        function renderAnswerReview() {
+            const reviewList = document.getElementById('answerReviewList');
+            reviewList.innerHTML = '';
+
+            questions.forEach((q, idx) => {
+                const userAns = userAnswers[q.id];
+                let isCorrect = false;
+
+                if (userAns) {
+                    if (q.tipe === 'pg') {
+                        isCorrect = userAns.toLowerCase() === q.kunci.toLowerCase();
+                    } else {
+                        isCorrect = q.kunci.some(k => k.toLowerCase().trim() === userAns.toLowerCase().trim());
+                    }
+                }
+
+                let userAnsText = '(Tidak Dijawab)';
+                if (userAns) {
+                    if (q.tipe === 'pg') {
+                        userAnsText = `${userAns.toUpperCase()}. ${q.pilihan[userAns] || ''}`;
+                    } else {
+                        userAnsText = userAns.toUpperCase();
+                    }
+                }
+
+                let keyAnsText = '';
+                if (q.tipe === 'pg') {
+                    keyAnsText = `${q.kunci.toUpperCase()}. ${q.pilihan[q.kunci] || ''}`;
+                } else {
+                    keyAnsText = q.kunci.join(' / ').toUpperCase();
+                }
+
+                const item = document.createElement('div');
+                item.className = 'p-4 rounded-xl border border-slate-200 bg-slate-50/60 text-xs space-y-2';
+                item.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-slate-700">Soal #${idx + 1} (${q.kategori})</span>
+                        <span class="px-2.5 py-0.5 rounded-full font-bold border ${
+                            isCorrect ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 'bg-rose-100 text-rose-800 border-rose-300'
+                        }">${isCorrect ? 'BENAR' : 'SALAH'}</span>
+                    </div>
+                    <p class="font-semibold text-slate-800 text-sm">${q.soal}</p>
+                    <div class="bg-white p-2.5 rounded-lg border border-slate-200 space-y-1 font-mono">
+                        <div><span class="text-slate-400">Jawaban Anda:</span> <span class="${isCorrect ? 'text-emerald-700 font-bold' : 'text-rose-600 font-bold'}">${userAnsText}</span></div>
+                        <div><span class="text-slate-400">Kunci Jawaban:</span> <span class="text-blue-700 font-bold">${keyAnsText}</span></div>
+                    </div>
+                    <div class="text-slate-600 bg-blue-50/60 p-2.5 rounded-lg border border-blue-100">
+                        <strong class="text-blue-900 block mb-0.5"><i class="fa-solid fa-circle-info mr-1"></i>Pembahasan:</strong>
+                        ${q.pembahasan}
+                    </div>
+                `;
+                reviewList.appendChild(item);
+            });
+        }
+
+        function switchGuruView(view) {
+            const btnNilai = document.getElementById('guruTabNilai');
+            const btnSoal = document.getElementById('guruTabSoal');
+            const viewNilai = document.getElementById('guruNilaiView');
+            const viewSoal = document.getElementById('guruSoalView');
+
+            if (view === 'nilai') {
+                btnNilai.className = 'px-5 py-3 font-bold text-sm border-b-2 border-unbk-blue text-unbk-blue flex items-center gap-2 cursor-pointer';
+                btnSoal.className = 'px-5 py-3 font-semibold text-sm text-slate-500 hover:text-slate-800 border-b-2 border-transparent flex items-center gap-2 cursor-pointer';
+                viewNilai.classList.remove('hidden');
+                viewSoal.classList.add('hidden');
+            } else {
+                btnSoal.className = 'px-5 py-3 font-bold text-sm border-b-2 border-unbk-blue text-unbk-blue flex items-center gap-2 cursor-pointer';
+                btnNilai.className = 'px-5 py-3 font-semibold text-sm text-slate-500 hover:text-slate-800 border-b-2 border-transparent flex items-center gap-2 cursor-pointer';
+                viewSoal.classList.remove('hidden');
+                viewNilai.classList.add('hidden');
+            }
+        }
+
+        function renderStudentScoresTable() {
+            const tbody = document.getElementById('studentScoresTableBody');
+            tbody.innerHTML = '';
+
+            if (studentResults.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-slate-400">Belum ada siswa yang menyelesaikan ujian di perangkat ini. Seluruh nilai otomatis terkirim ke Google Spreadsheet.</td></tr>`;
+                return;
+            }
+
+            studentResults.forEach((res, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50 transition';
+                tr.innerHTML = `
+                    <td class="p-3 font-mono text-slate-400">${idx + 1}</td>
+                    <td class="p-3 font-bold text-slate-800">${res.nama}</td>
+                    <td class="p-3 font-semibold text-blue-700">${res.kelas}</td>
+                    <td class="p-3 font-mono text-slate-500">${res.finishTime}</td>
+                    <td class="p-3 text-center font-mono">${res.correctCount} / ${res.incorrectCount}</td>
+                    <td class="p-3 text-center font-mono font-bold text-sm text-blue-900">${res.score}</td>
+                    <td class="p-3 text-center">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold ${
+                            res.score >= 75 ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                        }">${res.score >= 75 ? 'LULUS' : 'REMIDI'}</span>
+                    </td>
+                    <td class="p-3 text-center">
+                        <button onclick="deleteStudentResult(${res.id})" class="text-rose-500 hover:text-rose-700 p-1 cursor-pointer" title="Hapus Data"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterStudentTable() {
+            const query = document.getElementById('searchStudentInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#studentScoresTableBody tr');
+            rows.forEach(tr => {
+                const text = tr.textContent.toLowerCase();
+                tr.style.display = text.includes(query) ? '' : 'none';
+            });
+        }
+
+        function clearStudentResults() {
+            if (studentResults.length === 0) return;
+            studentResults = [];
+            localStorage.removeItem('cbt_student_results_history');
+            renderStudentScoresTable();
+            showToast('Rekapitulasi nilai lokal berhasil dibersihkan.', 'info');
+        }
+
+        function deleteStudentResult(id) {
+            studentResults = studentResults.filter(r => r.id !== id);
+            localStorage.setItem('cbt_student_results_history', JSON.stringify(studentResults));
+            renderStudentScoresTable();
+            showToast('Data siswa berhasil dihapus.', 'info');
+        }
+
+        function exportScoresToCSV() {
+            if (studentResults.length === 0) {
+                showToast('Tidak ada data nilai untuk diekspor!', 'warning');
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,No,Nama Siswa,Kelas,Nilai Akhir,Jawaban Benar,Jawaban Salah,Waktu Selesai\n";
+            studentResults.forEach((r, i) => {
+                csvContent += `${i + 1},"${r.nama}","${r.kelas}",${r.score},${r.correctCount},${r.incorrectCount},"${r.finishTime}"\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Rekap_Nilai_CBT_${Date.now()}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast('File CSV berhasil diunduh.', 'info');
+        }
+
+        function renderGuruQuestionsList() {
+            const container = document.getElementById('guruQuestionsList');
+            container.innerHTML = '';
+
+            questions.forEach((q, idx) => {
+                const card = document.createElement('div');
+                card.className = 'p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2 text-xs';
+                
+                let choicesHtml = '';
+                if (q.tipe === 'pg') {
+                    choicesHtml = `<div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 my-2">`;
+                    for (let k in q.pilihan) {
+                        const isKey = k === q.kunci;
+                        choicesHtml += `<div class="p-2 rounded border ${isKey ? 'bg-emerald-50 border-emerald-300 font-bold text-emerald-900' : 'bg-white border-slate-200'}">
+                            <span class="uppercase font-mono">${k}.</span> ${q.pilihan[k]}
+                        </div>`;
+                    }
+                    choicesHtml += `</div>`;
+                } else {
+                    choicesHtml = `<div class="p-2.5 my-2 bg-emerald-50 border border-emerald-200 rounded font-mono text-emerald-900">
+                        <strong>Kunci Jawaban Objektif:</strong> ${q.kunci.join(' / ').toUpperCase()}
+                    </div>`;
+                }
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="bg-blue-100 text-blue-800 font-bold px-2.5 py-1 rounded-full">Soal No. ${idx + 1} (${q.kategori})</span>
+                        <div class="space-x-2">
+                            <button onclick="openQuestionModal(${q.id})" class="px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg cursor-pointer"><i class="fa-solid fa-pen mr-1"></i> Edit</button>
+                        </div>
+                    </div>
+                    <p class="font-semibold text-slate-800 text-sm mt-1">${q.soal}</p>
+                    ${choicesHtml}
+                    <div class="text-slate-500 bg-white p-2 rounded border border-slate-200">
+                        <strong>Pembahasan:</strong> ${q.pembahasan}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function openQuestionModal(qId) {
+            const modal = document.getElementById('questionModal');
+            modal.classList.remove('hidden');
+
+            if (qId) {
+                const q = questions.find(item => item.id === qId);
+                document.getElementById('modalQuestionTitle').textContent = `Edit Soal #${qId}`;
+                document.getElementById('editQuestionId').value = q.id;
+                document.getElementById('editKategori').value = q.kategori;
+                document.getElementById('editTipe').value = q.tipe;
+                document.getElementById('editSoalText').value = q.soal;
+                document.getElementById('editPembahasan').value = q.pembahasan;
+
+                toggleEditTipeFields();
+
+                if (q.tipe === 'pg') {
+                    document.getElementById('editOptA').value = q.pilihan.a || '';
+                    document.getElementById('editOptB').value = q.pilihan.b || '';
+                    document.getElementById('editOptC').value = q.pilihan.c || '';
+                    document.getElementById('editOptD').value = q.pilihan.d || '';
+                    document.getElementById('editOptE').value = q.pilihan.e || '';
+                    document.getElementById('editKunciPg').value = q.kunci;
+                } else {
+                    document.getElementById('editKunciIsian').value = q.kunci.join(', ');
+                }
+            } else {
+                document.getElementById('modalQuestionTitle').textContent = 'Tambah Soal Baru';
+                document.getElementById('editQuestionId').value = '';
+                document.getElementById('questionEditForm').reset();
+                toggleEditTipeFields();
+            }
+        }
+
+        function closeQuestionModal() {
+            document.getElementById('questionModal').classList.add('hidden');
+        }
+
+        function toggleEditTipeFields() {
+            const tipe = document.getElementById('editTipe').value;
+            const pgBox = document.getElementById('editPgOptionsBox');
+            const isianBox = document.getElementById('editIsianOptionsBox');
+
+            if (tipe === 'pg') {
+                pgBox.classList.remove('hidden');
+                isianBox.classList.add('hidden');
+            } else {
+                pgBox.classList.add('hidden');
+                isianBox.classList.remove('hidden');
+            }
+        }
+
+        function saveQuestionForm(e) {
+            e.preventDefault();
+            const qIdVal = document.getElementById('editQuestionId').value;
+            const kategori = document.getElementById('editKategori').value;
+            const tipe = document.getElementById('editTipe').value;
+            const soal = document.getElementById('editSoalText').value.trim();
+            const pembahasan = document.getElementById('editPembahasan').value.trim();
+
+            let targetQ = null;
+            if (qIdVal) {
+                targetQ = questions.find(q => q.id === parseInt(qIdVal));
+            } else {
+                targetQ = { id: Date.now() };
+                questions.push(targetQ);
+            }
+
+            targetQ.kategori = kategori;
+            targetQ.tipe = tipe;
+            targetQ.soal = soal;
+            targetQ.pembahasan = pembahasan;
+
+            if (tipe === 'pg') {
+                targetQ.pilihan = {
+                    a: document.getElementById('editOptA').value.trim(),
+                    b: document.getElementById('editOptB').value.trim(),
+                    c: document.getElementById('editOptC').value.trim(),
+                    d: document.getElementById('editOptD').value.trim(),
+                    e: document.getElementById('editOptE').value.trim()
+                };
+                targetQ.kunci = document.getElementById('editKunciPg').value;
+            } else {
+                const keysInput = document.getElementById('editKunciIsian').value;
+                targetQ.kunci = keysInput.split(',').map(s => s.trim().toLowerCase()).filter(s => s);
+            }
+
+            localStorage.setItem('cbt_questions_data', JSON.stringify(questions));
+            closeQuestionModal();
+            renderGuruQuestionsList();
+            showToast('Soal berhasil disimpan!', 'info');
+        }
+
+        // Custom Toast Alert System
+        function showToast(msg, type = 'info') {
+            const toast = document.getElementById('toastAlert');
+            const toastMsg = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMsg.textContent = msg;
+            if (type === 'warning') {
+                toastIcon.className = 'fa-solid fa-triangle-exclamation text-amber-400 text-base';
+            } else {
+                toastIcon.className = 'fa-solid fa-circle-info text-blue-400 text-base';
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
